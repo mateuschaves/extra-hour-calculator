@@ -1,8 +1,10 @@
 'use client'
-
-import { Box, Button, Container, Divider, Flex, Heading, Text } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
 import React from 'react'
+import { Container, Divider} from '@chakra-ui/react'
+
+import EmptyList from '@/app/components/EmptyList'
+import Header from '@/app/components/Header'
+import Footer from '@/app/components/Footer'
 
 export default function Home() {
   return (
@@ -16,29 +18,11 @@ export default function Home() {
       borderTopColor={'blackAlpha.900'}
       borderTopWidth={'6px'}
     >
-      <Heading
-        fontWeight={'bold'}
-        size={'lg'}
-      >
-        Minhas horas
-      </Heading>
+      <Header title='Horas extras' />
       <Divider marginY={4} />
-      <Text align={'center'}>
-        Sem horas extras 🥲
-      </Text>
+      <EmptyList title='Sem horas extras 🥲' />
       <Divider marginY={4} />
-      <Flex flex={1} width={'inherit'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-        <Flex>
-          <Text colorScheme='gray'>R$ 9.000,00</Text>
-        </Flex>
-        <Button 
-          leftIcon={<AddIcon />} 
-          type='button' 
-          variant={'ghost'}
-          >
-            Adicionar horas
-        </Button>
-      </Flex>
+      <Footer buttonTitle='Adicionar' totalMoneyValue={9000} />
     </Container>
   )
 }
