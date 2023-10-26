@@ -7,9 +7,10 @@ import React from 'react';
 type Props = {
     buttonTitle: string
     totalMoneyValue: number
+    handleOpenModal: () => void
 }
 
-function Footer({ buttonTitle, totalMoneyValue }: Props) {
+function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
     return (
         <Flex 
             flex={1} 
@@ -25,6 +26,7 @@ function Footer({ buttonTitle, totalMoneyValue }: Props) {
                 leftIcon={<AddIcon />}
                 type='button'
                 variant={'ghost'}
+                onClick={handleOpenModal}
             >
                 {buttonTitle}
             </Button>

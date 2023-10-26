@@ -4,15 +4,17 @@ import { Input } from '@chakra-ui/input';
 import { Flex } from '@chakra-ui/layout';
 import { AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@chakra-ui/modal';
 import { FocusableElement } from '@chakra-ui/utils';
+import { on } from 'process';
 import React from 'react';
 
 type Props = {
     cancelRef: React.RefObject<FocusableElement> | React.LegacyRef<HTMLButtonElement>
     onClose: () => void
+    onAddExtraHour: () => void
     isLoading?: boolean
 }
 
-function AddExtraHourForm({ cancelRef, onClose, isLoading = false }: Props) {
+function AddExtraHourForm({ cancelRef, onClose, onAddExtraHour, isLoading = false }: Props) {
     return (
         <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
@@ -44,7 +46,7 @@ function AddExtraHourForm({ cancelRef, onClose, isLoading = false }: Props) {
                     Cancelar
                 </Button>
                 <Button
-                    onClick={onClose} 
+                    onClick={onAddExtraHour} 
                     ml={3}
                     isLoading={isLoading}
                 >
