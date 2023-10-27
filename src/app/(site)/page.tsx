@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState, useId } from 'react'
+import React, { useRef, useState } from 'react'
 import { Container, Divider, useDisclosure} from '@chakra-ui/react'
 
 import { uuid } from 'uuidv4';
@@ -9,14 +9,17 @@ import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import BaseModal from '@/app/components/BaseModal'
 import AddExtraHourForm from '@/app/components/AddExtraHourForm'
+import ExtraHourList from '@/app/components/ExtraHourList';
+
 import { delay } from '@/app/utils/async.util'
 
 import { FocusableElement } from '@chakra-ui/utils'
 
-type ExtraHour = {
+export type ExtraHour = {
   id: string
   entryDate: string
   exitDate: string
+  description?: string
   totalHours?: number
   totalMoney?: number
 }
@@ -28,19 +31,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [extraHours, setExtraHours] = useState<ExtraHour[]>([])
 
-  useEffect(() => {
-    onOpen()
-  }, [])
+  const isExtraHoursEmpty = extraHours.length === 0
 
-  async function handleAddExtraHour() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+  async function handleAddExtraHour(entryDate: string, exitDate: string, description: string) {
     const id = uuid()
     setIsLoading(true)
 
     const newExtraHour: ExtraHour = {
       id,
-      entryDate: '2021-10-10T10:00',
-      exitDate: '2021-10-10T18:00',
+      entryDate,
+      exitDate,
+      description,
     }
 
     setExtraHours([...extraHours, newExtraHour])
@@ -51,8 +52,12 @@ export default function Home() {
     onClose()
   }
 
-  async function handleOpenModal() {
+  function handleOpenModal() {
     onOpen()
+  }
+
+  function renderExtraHours() {
+    return isExtraHoursEmpty ? <EmptyList title='Sem horas extras 🥲'/> : <ExtraHourList extraHours={extraHours}/>
   }
   
   return (
@@ -68,7 +73,7 @@ export default function Home() {
     >
       <Header title='Horas extras' />
       <Divider marginY={4} />
-      <EmptyList title='Sem horas extras 🥲' />
+      {renderExtraHours()}
       <Divider marginY={4} />
       <Footer 
         buttonTitle='Adicionar' 
