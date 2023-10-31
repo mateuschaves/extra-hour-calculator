@@ -44,3 +44,12 @@ export const hasSundayHours = (dateStart: Date, dateEnd: Date) => {
     return !!extractSundayHours(dateStart, dateEnd);
 }
 
+export function getDifferenceInHours(date1: string, date2: string): number {
+    const date1Formatted = new Date(date1);
+    const date2Formatted = new Date(date2);
+  
+    const differenceInMs = date1Formatted.getTime() - date2Formatted.getTime();
+    return Math.abs(Math.floor(differenceInMs / (1000 * 60 * 60)));
+  }
+  
+

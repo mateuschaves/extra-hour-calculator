@@ -9,15 +9,6 @@ export function formatTimeHHMM(time: number) {
 }
 
 
-export function getDifferenceInHours(date1: string, date2: string): number {
-  const date1Formatted = new Date(date1);
-  const date2Formatted = new Date(date2);
-
-  const differenceInMs = date1Formatted.getTime() - date2Formatted.getTime();
-  return Math.abs(Math.floor(differenceInMs / (1000 * 60 * 60)));
-}
-
-
 function getMonthName(month: number): string {
   switch (month) {
     case 0:
@@ -56,4 +47,8 @@ export function formatDayAndMonth(date: string): string {
   const monthName = getMonthName(month);
 
   return `${day} de ${monthName} às ${dateFormatted.getHours()}:${dateFormatted.getMinutes()}`;
+}
+
+export function pluralize(count: number, word: string) {
+  return count === 1 ? word : `${word}s`;
 }

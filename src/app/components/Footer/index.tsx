@@ -11,6 +11,8 @@ type Props = {
 }
 
 function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
+    const hasTotalMoneyValue = totalMoneyValue > 0
+
     return (
         <Flex 
             flex={1} 
@@ -21,7 +23,7 @@ function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
             paddingTop={'8'}
         >
             <Flex>
-                <Text>{formatMoneyBRL(totalMoneyValue)}</Text>
+                {hasTotalMoneyValue && <Text>{formatMoneyBRL(totalMoneyValue)}</Text>}
             </Flex>
             <Button
                 leftIcon={<AddIcon />}

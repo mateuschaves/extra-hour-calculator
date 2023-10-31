@@ -14,6 +14,7 @@ import ExtraHourList from '@/app/components/ExtraHourList';
 import { delay } from '@/app/utils/async.util'
 
 import { FocusableElement } from '@chakra-ui/utils'
+import { getDifferenceInHours } from '../utils/extraHour.util';
 
 export type ExtraHour = {
   id: string
@@ -33,15 +34,22 @@ export default function Home() {
 
   const isExtraHoursEmpty = extraHours.length === 0
 
+  const totalExtraHours = extraHours.reduce((acc, extraHour) => {
+    return acc + (extraHour?.totalHours ?? 0)
+  }, 0)
+
   async function handleAddExtraHour(entryDate: string, exitDate: string, description: string) {
     const id = uuid()
     setIsLoading(true)
+
+    const differenceInHours = getDifferenceInHours(entryDate, exitDate)
 
     const newExtraHour: ExtraHour = {
       id,
       entryDate,
       exitDate,
       description,
+      totalHours: differenceInHours
     }
 
     setExtraHours([...extraHours, newExtraHour])
@@ -71,12 +79,12 @@ export default function Home() {
       borderTopColor={'blackAlpha.900'}
       borderTopWidth={'6px'}
     >
-      <Header title='Horas extras' />
+      <Header title='Horas extras' totalExtraHours={totalExtraHours} />
       {renderExtraHours()}
       <Footer 
         buttonTitle='Adicionar' 
         handleOpenModal={handleOpenModal} 
-        totalMoneyValue={9000} 
+        totalMoneyValue={9}
       />
 
       <BaseModal 

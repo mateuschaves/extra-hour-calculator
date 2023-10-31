@@ -1,5 +1,6 @@
 import { ExtraHour } from '@/app/(site)/page'
-import { formatDayAndMonth as formatDateTime, getDifferenceInHours } from '@/app/utils/format.util'
+import { getDifferenceInHours } from '@/app/utils/extraHour.util'
+import { formatDayAndMonth as formatDateTime } from '@/app/utils/format.util'
 import { Td, Tr } from '@chakra-ui/react'
 import React from 'react'
 

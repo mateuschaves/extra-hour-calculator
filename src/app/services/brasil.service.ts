@@ -28,7 +28,7 @@ export async function isHoliday(date: Date) {
    if (holidays.length) {
          const holiday = holidays.find((holiday) => {
               const holidayDate = new Date(holiday.date);
-              return holidayDate.getDate() === date.getDate();
+              return holidayDate.getDate() === date.getDate() && holidayDate.getMonth() === date.getMonth();
          });
          return !!holiday;
    }
