@@ -10,6 +10,7 @@ function Header({ title }: Props) {
         <Heading
             fontWeight={'bold'}
             size={'lg'}
+            marginBottom={'8'}
         >
             {title}
         </Heading>

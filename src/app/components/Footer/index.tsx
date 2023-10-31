@@ -18,6 +18,7 @@ function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
             flexDirection={'row'} 
             alignItems={'center'} 
             justifyContent={'space-between'}
+            paddingTop={'8'}
         >
             <Flex>
                 <Text>{formatMoneyBRL(totalMoneyValue)}</Text>

@@ -47,17 +47,26 @@ function AddExtraHourForm({ cancelRef, onClose, onAddExtraHour, isLoading = fals
             <Flex flexDirection={'column'} gap={'8'}>
                 <FormControl>
                     <FormLabel>Data de entrada</FormLabel>
-                    <Input type='datetime-local' ref={entryDateRef} />
+                    <Input 
+                        type='datetime-local' 
+                        ref={entryDateRef} 
+                    />
                 </FormControl>
 
                 <FormControl>
                     <FormLabel>Data de saída</FormLabel>
-                    <Input type='datetime-local' ref={exitDateRef} />
+                    <Input 
+                        type='datetime-local' 
+                        ref={exitDateRef} 
+                    />
                 </FormControl>
 
                 <FormControl>
                     <FormLabel>Descrição</FormLabel>
-                    <Input type='text' ref={descriptionRef} />
+                    <Input 
+                        type='text' 
+                        ref={descriptionRef} 
+                    />
                 </FormControl>
             </Flex>
 

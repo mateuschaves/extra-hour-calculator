@@ -72,15 +72,12 @@ export default function Home() {
       borderTopWidth={'6px'}
     >
       <Header title='Horas extras' />
-      <Divider marginY={4} />
       {renderExtraHours()}
-      <Divider marginY={4} />
       <Footer 
         buttonTitle='Adicionar' 
         handleOpenModal={handleOpenModal} 
         totalMoneyValue={9000} 
       />
-
 
       <BaseModal 
         cancelRef={cancelRef as unknown as React.RefObject<FocusableElement>}
