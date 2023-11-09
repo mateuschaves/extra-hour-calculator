@@ -1,8 +1,8 @@
+import React from 'react';
 import { formatMoneyBRL } from '@/app/utils/format.util';
 import { Button } from '@chakra-ui/button';
 import { AddIcon } from '@chakra-ui/icons';
 import { Flex, Text } from '@chakra-ui/layout';
-import React from 'react';
 
 type Props = {
     buttonTitle: string

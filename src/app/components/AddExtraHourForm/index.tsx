@@ -1,10 +1,10 @@
+import React, { useRef } from 'react';
 import { Button } from '@chakra-ui/button';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Flex } from '@chakra-ui/layout';
 import { AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader } from '@chakra-ui/modal';
 import { FocusableElement } from '@chakra-ui/utils';
-import React, { useRef } from 'react';
 
 type onAddExtraHourFunction = (
     entryDate: string, 

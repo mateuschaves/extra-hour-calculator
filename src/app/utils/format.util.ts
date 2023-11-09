@@ -46,9 +46,16 @@ export function formatDayAndMonth(date: string): string {
   const month = dateFormatted.getMonth();
   const monthName = getMonthName(month);
 
-  return `${day} de ${monthName} às ${dateFormatted.getHours()}:${dateFormatted.getMinutes()}`;
+  const hours = String(dateFormatted.getHours()).padStart(2, '0');
+  const minutes = String(dateFormatted.getMinutes()).padStart(2, '0');
+
+  return `${day} de ${monthName} às ${hours}:${minutes}`;
 }
 
 export function pluralize(count: number, word: string) {
   return count === 1 ? word : `${word}s`;
+}
+
+export function cleanNumber(value: string): number {
+  return Number(value.replaceAll('.', '').replaceAll(',', '.'));
 }

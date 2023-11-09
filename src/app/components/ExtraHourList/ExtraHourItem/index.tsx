@@ -1,8 +1,8 @@
+import React from 'react'
 import { ExtraHour } from '@/app/(site)/page'
 import { getDifferenceInHours } from '@/app/utils/extraHour.util'
 import { formatDayAndMonth as formatDateTime } from '@/app/utils/format.util'
 import { Td, Tr } from '@chakra-ui/react'
-import React from 'react'
 
 type Props = {
     extraHour: ExtraHour

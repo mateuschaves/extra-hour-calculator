@@ -1,9 +1,11 @@
 'use client'
 
-import StyledComponentsRegistry from '@/lib/styledComponentRegistry'
-import GlobalStyle from '@/style/global'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider } from '@chakra-ui/react'
+
+import StyledComponentsRegistry from '@/lib/styledComponentRegistry'
+import GlobalStyle from '@/style/global'
+import { InfoContextProvider } from '@/app/contexts/info.context'
 
 export function Providers({ 
     children 
@@ -14,7 +16,9 @@ export function Providers({
     <CacheProvider>
       <ChakraProvider>
         <StyledComponentsRegistry>
-          {children}
+          <InfoContextProvider>
+            {children}
+          </InfoContextProvider>
           <GlobalStyle />
         </StyledComponentsRegistry>
       </ChakraProvider>
