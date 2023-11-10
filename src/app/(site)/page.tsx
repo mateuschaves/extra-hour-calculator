@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Container, Flex, Text, useDisclosure} from '@chakra-ui/react'
 
 import { HamburgerIcon } from '@chakra-ui/icons';
@@ -39,25 +39,16 @@ export default function Home() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [extraHours, setExtraHours] = useState<ExtraHour[]>([])
-  const [totalMoney, setTotalMoney] = useState(0)
 
   const isExtraHoursEmpty = extraHours.length === 0
 
   const totalExtraHours = extraHours.reduce((acc, extraHour) => {
     return acc + (extraHour?.totalHours ?? 0)
   }, 0)
-
-  useEffect(() => {
-    (async () => {
-      let _totalMoney = 0
-      for await (const extraHour of extraHours) {
-        const totalMoney = await calculateExtraHoursV2(new Date(extraHour.entryDate), new Date(extraHour.exitDate), +infoContext.valueHour)
-        _totalMoney += totalMoney
-      }
-
-      setTotalMoney(_totalMoney)
-    })()
-  }, [totalExtraHours, extraHours, infoContext.valueHour])
+  const totalExtraMoney = extraHours.reduce((acc, extraHour) => {
+    return acc + (extraHour?.totalMoney ?? 0)
+  }
+  , 0)
 
   async function handleAddExtraHour(entryDate: string, exitDate: string, description: string) {
     const id = uuid()
@@ -65,12 +56,15 @@ export default function Home() {
 
     const differenceInHours = getDifferenceInHours(entryDate, exitDate)
 
+    const totalMoney = await calculateExtraHoursV2(new Date(entryDate), new Date(exitDate), +infoContext.valueHour)
+
     const newExtraHour: ExtraHour = {
       id,
       entryDate,
       exitDate,
       description,
-      totalHours: differenceInHours
+      totalHours: differenceInHours,
+      totalMoney,
     }
 
     setExtraHours([...extraHours, newExtraHour])
@@ -133,7 +127,7 @@ export default function Home() {
         <Footer 
           buttonTitle='Adicionar' 
           handleOpenModal={handleOpenModal} 
-          totalMoneyValue={totalMoney}
+          totalMoneyValue={totalExtraMoney}
         />
 
         <BaseModal 

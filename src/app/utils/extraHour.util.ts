@@ -8,18 +8,34 @@ const NORMAL_FEE = 1.5;
 const NIGHT_FEE = 0.2 + NORMAL_FEE;
 
 
-export function getDifferenceInHours(date1: string, date2: string): number {
+export function getDifferenceInHours(date1: string, date2: string) {
     const date1Formatted = new Date(date1);
     const date2Formatted = new Date(date2);
   
     const differenceInMs = date1Formatted.getTime() - date2Formatted.getTime();
-    return Math.abs(Math.floor(differenceInMs / (1000 * 60 * 60)));
+    return Math.abs(differenceInMs / (1000 * 60 * 60));
 }
 
 export async function calculateExtraHoursV2(dateStart: Date, dateEnd: Date, baseHourValue: number): Promise<number> {
     const startHour = dateStart.getHours();
     const endHour = dateEnd.getHours();
     const isSunday = dateStart.getDay() === 0;
+
+    const hasLessThanOneHour = getDifferenceInHours(dateStart.toISOString(), dateEnd.toISOString()) < 1;
+
+    if (hasLessThanOneHour) {
+      // Less than one hour, calculate extra hours based on minutes
+      const differenceInMinutes = Math.abs(dateStart.getMinutes() - dateEnd.getMinutes());
+
+      const _isHoliday = await isHoliday(dateStart);
+
+      if (isSunday || _isHoliday) {
+        // Sunday hours with 100% fee
+        return baseHourValue + (baseHourValue * differenceInMinutes / 60);
+      }
+
+      return baseHourValue * differenceInMinutes / 60;
+    }
   
     let extraHours = 0;
   

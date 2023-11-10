@@ -19,7 +19,7 @@ type Props = {
 export default function ExtraHourList({ extraHours }: Props) {
     return (
         <TableContainer>
-            <Table variant='simple'>
+            <Table variant='simple' overflowX={'scroll'}>
                 <TableCaption>
                     Horas extras adicionadas
                 </TableCaption>

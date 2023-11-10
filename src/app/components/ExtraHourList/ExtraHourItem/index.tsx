@@ -10,14 +10,18 @@ type Props = {
 
 export default function ExtraHourItem({ extraHour }: Props) {
     return (
-        <Tr _hover={{
+        <Tr 
+        _hover={{
+            fontSize: 'sm',
             cursor: 'pointer',
-            backgroundColor: 'gray.100'
+            backgroundColor: 'gray.100',
         }}>
-            <Td>{formatDateTime(extraHour.entryDate)}</Td>
-            <Td>{formatDateTime(extraHour.exitDate)}</Td>
-            <Td>{extraHour.description}</Td>
-            <Td isNumeric>{getDifferenceInHours(extraHour.entryDate, extraHour.exitDate)}</Td>
+            <Td fontSize={'sm'}>{formatDateTime(extraHour.entryDate)}</Td>
+            <Td fontSize={'sm'}>{formatDateTime(extraHour.exitDate)}</Td>
+            <Td fontSize={'sm'}>{extraHour.description}</Td>
+            <Td fontSize={'sm'} isNumeric>
+                {getDifferenceInHours(extraHour.entryDate, extraHour.exitDate).toFixed(2)}
+            </Td>
         </Tr>
     )
 }
