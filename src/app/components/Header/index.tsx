@@ -1,7 +1,7 @@
 import React from 'react'
 import { Heading } from '@chakra-ui/layout'
 import { Flex, Text } from '@chakra-ui/react'
-import { pluralize } from '@/app/utils/format.util'
+import { formatHours } from '@/app/utils/format.util'
 
 type Props = {
     title: string
@@ -12,9 +12,7 @@ function Header({ title, totalExtraHours }: Props) {
 
     const hasExtraHours = totalExtraHours > 0
 
-    const hourTitlePluralized = pluralize(totalExtraHours, 'hora')
-    const extraTitlePluralized = pluralize(totalExtraHours, 'extra')
-    const extraHourDescription = `Você fez ${totalExtraHours} ${hourTitlePluralized} ${extraTitlePluralized} esse mês`
+    const extraHourDescription = `Você fez ${formatHours(totalExtraHours)} esse mês`
 
     return (
         <Flex alignItems={'center'} justifyContent={'space-between'} marginBottom={8}>
