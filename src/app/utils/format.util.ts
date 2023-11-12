@@ -59,3 +59,14 @@ export function pluralize(count: number, word: string) {
 export function cleanNumber(value: string): number {
   return Number(value.replaceAll('.', '').replaceAll(',', '.'));
 }
+
+export function formatHours(value: number) {
+  const hours = Math.floor(value);
+  const minutes = Math.round((value - hours) * 60);
+
+  if (!hours) {
+    return `${minutes}min`;
+  }
+
+  return `${hours}h ${minutes}min`;
+}
