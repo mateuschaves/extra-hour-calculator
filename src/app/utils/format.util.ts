@@ -1,7 +1,7 @@
 
 
-export function formatMoneyBRL(value: number): string {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+export function formatMoneyBRL(value: string): string {
+  return cleanNumber(value.toString()).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 export function formatTimeHHMM(time: number) {

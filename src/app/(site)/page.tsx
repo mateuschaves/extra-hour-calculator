@@ -14,11 +14,11 @@ import AddExtraHourForm from '@/app/components/AddExtraHourForm'
 import ExtraHourList from '@/app/components/ExtraHourList';
 
 import { delay } from '@/app/utils/async.util'
-import { calculateExtraHoursV2, getDifferenceInHours } from '@/app/utils/extraHour.util';
+import { calculateExtraHoursV2, convertTaxToPercentage, getDifferenceInHours } from '@/app/utils/extraHour.util';
 import { FocusableElement } from '@chakra-ui/utils'
 import ExtraHourConfigDrawer from './components/ExtraHourConfigDrawer';
-import { useInfoContext } from '../contexts/info.context';
-import { cleanNumber, formatMoneyBRL } from '../utils/format.util';
+import { useInfoContext } from '@/app/contexts/info.context';
+import { formatMoneyBRL } from '@/app/utils/format.util';
 
 export type ExtraHour = {
   id: string
@@ -32,7 +32,7 @@ export type ExtraHour = {
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
-  const [valueHour, setValueHour] = useState<string>('')
+
   const infoContext = useInfoContext()
 
   const cancelRef = useRef<FocusableElement>()
@@ -56,7 +56,18 @@ export default function Home() {
 
     const differenceInHours = getDifferenceInHours(entryDate, exitDate)
 
-    const totalMoney = await calculateExtraHoursV2(new Date(entryDate), new Date(exitDate), +infoContext.valueHour)
+    const taxConfig = {
+      normalTax: convertTaxToPercentage(infoContext.normalTax),
+      nightTax: convertTaxToPercentage(infoContext.nightTax),
+      holidayTax: convertTaxToPercentage(infoContext.holidayTax)
+    }
+
+    const totalMoney = await calculateExtraHoursV2(
+      new Date(entryDate), 
+      new Date(exitDate), 
+      +infoContext.valueHour, 
+      taxConfig
+    )
 
     const newExtraHour: ExtraHour = {
       id,
@@ -88,9 +99,6 @@ export default function Home() {
   }
 
   function handleConfigExtraHour() {
-    const cleanedValueHour = cleanNumber(valueHour)
-
-    infoContext.setValueHour(String(cleanedValueHour))
     onDrawerClose()
   }
   
@@ -100,8 +108,6 @@ export default function Home() {
         isOpen={isDrawerOpen}
         onClose={onDrawerClose}
         onConfirm={handleConfigExtraHour}
-        hourValue={valueHour}
-        setHourValue={setValueHour}
       />
       <HamburgerIcon 
         alignSelf={'flex-end'}
@@ -144,7 +150,7 @@ export default function Home() {
         </BaseModal>
       </Container>
       <Text size='sm' marginX='auto'>
-        Seu valor hora é de {formatMoneyBRL(+infoContext.valueHour)}
+        Seu valor hora é de {formatMoneyBRL(infoContext.valueHour)}
       </Text>
     </Flex>
   )

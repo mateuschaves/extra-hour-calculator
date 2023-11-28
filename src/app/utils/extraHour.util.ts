@@ -8,6 +8,12 @@ const NORMAL_FEE = 1.5;
 const NIGHT_FEE = 0.2 + NORMAL_FEE;
 
 
+type TaxConfig = {
+  normalTax: number,
+  nightTax: number,
+  holidayTax: number,
+}
+
 export function getDifferenceInHours(date1: string, date2: string) {
     const date1Formatted = new Date(date1);
     const date2Formatted = new Date(date2);
@@ -16,7 +22,7 @@ export function getDifferenceInHours(date1: string, date2: string) {
     return Math.abs(differenceInMs / (1000 * 60 * 60));
 }
 
-export async function calculateExtraHoursV2(dateStart: Date, dateEnd: Date, baseHourValue: number): Promise<number> {
+export async function calculateExtraHoursV2(dateStart: Date, dateEnd: Date, baseHourValue: number, taxConfig: TaxConfig): Promise<number> {
     const startHour = dateStart.getHours();
     const endHour = dateEnd.getHours();
     const isSunday = dateStart.getDay() === 0;
@@ -24,13 +30,11 @@ export async function calculateExtraHoursV2(dateStart: Date, dateEnd: Date, base
     const hasLessThanOneHour = getDifferenceInHours(dateStart.toISOString(), dateEnd.toISOString()) < 1;
 
     if (hasLessThanOneHour) {
-      // Less than one hour, calculate extra hours based on minutes
       const differenceInMinutes = Math.abs(dateStart.getMinutes() - dateEnd.getMinutes());
 
       const _isHoliday = await isHoliday(dateStart);
 
       if (isSunday || _isHoliday) {
-        // Sunday hours with 100% fee
         return baseHourValue + (baseHourValue * differenceInMinutes / 60);
       }
 
@@ -50,22 +54,23 @@ export async function calculateExtraHoursV2(dateStart: Date, dateEnd: Date, base
 
       if (isNormalHour) {
         // Normal hours, no fee
-        //extraHours += baseHourValue;
       } else if (isExtraHour) {
-        // Extra hours with 50% fee
-        extraHours += baseHourValue * NORMAL_FEE;
+        extraHours += baseHourValue * (taxConfig.normalTax || NORMAL_FEE);
       } else if (isNightHour) {
-        // Night hours with 70% fee
-        extraHours += baseHourValue * NIGHT_FEE;
+        extraHours += baseHourValue * (taxConfig.nightTax || NIGHT_FEE);
       }
   
       if (isSunday || _isHoliday) {
-        // Sunday hours with 100% fee
-        extraHours += baseHourValue;
+        extraHours += baseHourValue * (taxConfig.holidayTax);
       }
     }
   
     return extraHours;
-  }
+}
+
+export function convertTaxToPercentage(tax: string) {
+  const _tax = Number(tax);
+  return (_tax / 100) + 1;
+}
   
 

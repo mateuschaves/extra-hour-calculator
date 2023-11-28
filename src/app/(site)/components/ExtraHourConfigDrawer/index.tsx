@@ -6,11 +6,9 @@ type Props = {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;
-    hourValue: string;
-    setHourValue: (value: string) => void;
   }
 
-export default function ExtraHourConfigDrawer({ isOpen, onClose, onConfirm, hourValue, setHourValue }: Props) {
+export default function ExtraHourConfigDrawer({ isOpen, onClose, onConfirm }: Props) {
   return (
     <BaseDrawer
         isOpen={isOpen}
@@ -19,8 +17,6 @@ export default function ExtraHourConfigDrawer({ isOpen, onClose, onConfirm, hour
         <ExtraHourConfigContent
           onClose={onClose}
           onConfirm={onConfirm}
-          hourValue={hourValue}
-          setHourValue={setHourValue}
         />
       </BaseDrawer>
   )
