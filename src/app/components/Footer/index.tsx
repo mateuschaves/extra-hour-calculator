@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { formatMoneyBRL } from '@/app/utils/format.util';
 import { Button } from '@chakra-ui/button';
 import { AddIcon } from '@chakra-ui/icons';
@@ -11,7 +11,7 @@ type Props = {
 }
 
 function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
-    const hasTotalMoneyValue = totalMoneyValue > 0
+    const hasTotalMoneyValue = useMemo(() => totalMoneyValue > 0, [totalMoneyValue])
 
     return (
         <Flex 
