@@ -23,7 +23,7 @@ function Footer({ buttonTitle, totalMoneyValue, handleOpenModal }: Props) {
             paddingTop={'8'}
         >
             <Flex>
-                {hasTotalMoneyValue && <Text>{formatMoneyBRL(totalMoneyValue)}</Text>}
+                {hasTotalMoneyValue && <Text>{formatMoneyBRL(totalMoneyValue.toString())}</Text>}
             </Flex>
             <Button
                 leftIcon={<AddIcon />}
