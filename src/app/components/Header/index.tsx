@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Heading } from '@chakra-ui/layout'
 import { Flex, Text } from '@chakra-ui/react'
 import { formatHours } from '@/app/utils/format.util'
@@ -10,8 +10,8 @@ type Props = {
 
 function Header({ title, totalExtraHours }: Props) {
 
-    const hasExtraHours = totalExtraHours > 0
-    const _formatHours = formatHours(totalExtraHours)
+    const hasExtraHours = useMemo(() => totalExtraHours > 0, [totalExtraHours])
+    const _formatHours = useMemo(() => formatHours(totalExtraHours), [totalExtraHours])
 
     const extraHourDescription = `Você fez ${_formatHours} esse mês`
 

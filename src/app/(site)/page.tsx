@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Container, Flex, Text, useDisclosure} from '@chakra-ui/react'
 
 import { HamburgerIcon } from '@chakra-ui/icons';
@@ -40,15 +40,21 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [extraHours, setExtraHours] = useState<ExtraHour[]>([])
 
-  const isExtraHoursEmpty = extraHours.length === 0
+  const isExtraHoursEmpty = useMemo(() => extraHours.length === 0, [extraHours])
 
-  const totalExtraHours = extraHours.reduce((acc, extraHour) => {
-    return acc + (extraHour?.totalHours ?? 0)
-  }, 0)
-  const totalExtraMoney = extraHours.reduce((acc, extraHour) => {
-    return acc + (extraHour?.totalMoney ?? 0)
-  }
-  , 0)
+  const totalExtraHours = useMemo(() => {
+    return extraHours.reduce((acc, extraHour) => {
+      return acc + (extraHour?.totalHours ?? 0)
+    }
+    , 0)
+  }, [extraHours])
+
+  const totalExtraMoney = useMemo(() => {
+    return extraHours.reduce((acc, extraHour) => {
+      return acc + (extraHour?.totalMoney ?? 0)
+    }
+    , 0)
+  }, [extraHours])
 
   async function handleAddExtraHour(entryDate: string, exitDate: string, description: string) {
     const id = uuid()
