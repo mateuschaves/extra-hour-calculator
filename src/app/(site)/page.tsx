@@ -1,10 +1,11 @@
-'use client'
-import React, { useMemo, useRef, useState } from 'react'
-import { Container, Flex, Text, useDisclosure} from '@chakra-ui/react'
+"use client";
+
+import React, {useEffect, useMemo, useRef, useState} from 'react'
+import { Container, Flex, Text, useDisclosure, useToast } from '@chakra-ui/react'
 
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 import EmptyList from '@/app/components/EmptyList'
 import Header from '@/app/components/Header'
@@ -19,6 +20,7 @@ import { FocusableElement } from '@chakra-ui/utils'
 import ExtraHourConfigDrawer from './components/ExtraHourConfigDrawer';
 import { useInfoContext } from '@/app/contexts/info.context';
 import { formatMoneyBRL } from '@/app/utils/format.util';
+import StorageClient, { StorageKeys } from "@/lib/storage";
 
 export type ExtraHour = {
   id: string
@@ -32,15 +34,21 @@ export type ExtraHour = {
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
-
   const infoContext = useInfoContext()
-
   const cancelRef = useRef<FocusableElement>()
-
   const [isLoading, setIsLoading] = useState(false)
   const [extraHours, setExtraHours] = useState<ExtraHour[]>([])
-
   const isExtraHoursEmpty = useMemo(() => extraHours.length === 0, [extraHours])
+  const toast = useToast()
+
+  const storageService = new StorageClient(localStorage);
+
+  useEffect(() => {
+    const extraHours = storageService?.get<ExtraHour[]>(StorageKeys.EXTRA_HOURS)
+
+    console.log(extraHours)
+    setExtraHours(extraHours ?? [])
+  }, [])
 
   const totalExtraHours = useMemo(() => {
     return extraHours.reduce((acc, extraHour) => {
@@ -57,39 +65,58 @@ export default function Home() {
   }, [extraHours])
 
   async function handleAddExtraHour(entryDate: string, exitDate: string, description: string) {
-    const id = uuid()
-    setIsLoading(true)
+    try {
+      const id = v4()
+      setIsLoading(true)
 
-    const differenceInHours = getDifferenceInHours(entryDate, exitDate)
+      const differenceInHours = getDifferenceInHours(entryDate, exitDate)
 
-    const taxConfig = {
-      normalTax: convertTaxToPercentage(infoContext.normalTax),
-      nightTax: convertTaxToPercentage(infoContext.nightTax),
-      holidayTax: convertTaxToPercentage(infoContext.holidayTax)
+      const taxConfig = {
+        normalTax: convertTaxToPercentage(infoContext.normalTax),
+        nightTax: convertTaxToPercentage(infoContext.nightTax),
+        holidayTax: convertTaxToPercentage(infoContext.holidayTax)
+      }
+
+      const totalMoney = await calculateExtraHoursV2(
+        new Date(entryDate),
+        new Date(exitDate),
+        +infoContext.valueHour,
+        taxConfig
+      )
+
+      const newExtraHour: ExtraHour = {
+        id,
+        entryDate,
+        exitDate,
+        description,
+        totalHours: differenceInHours,
+        totalMoney,
+      }
+
+      const newExtraHours = [...extraHours, newExtraHour]
+
+      setExtraHours(newExtraHours)
+      storageService?.save<ExtraHour[]>(StorageKeys.EXTRA_HOURS, newExtraHours);
+
+      await delay(1000)
+
+      setIsLoading(false)
+      onClose()
+      toast({
+        title: 'Hora adicionada com sucesso 🎉',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: 'Erro ao registrar hora extra 🥲',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
-
-    const totalMoney = await calculateExtraHoursV2(
-      new Date(entryDate), 
-      new Date(exitDate), 
-      +infoContext.valueHour, 
-      taxConfig
-    )
-
-    const newExtraHour: ExtraHour = {
-      id,
-      entryDate,
-      exitDate,
-      description,
-      totalHours: differenceInHours,
-      totalMoney,
-    }
-
-    setExtraHours([...extraHours, newExtraHour])
-
-    await delay(1000)
-
-    setIsLoading(false)
-    onClose()
   }
 
   function handleOpenModal() {
