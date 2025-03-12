@@ -6,7 +6,9 @@ class StorageClient {
     private storageClient?: StorageType = undefined;
 
     constructor(storageClient?: StorageType) {
-        this.storageClient = storageClient || localStorage;
+        if (typeof window !== 'undefined') {
+            this.storageClient = storageClient || localStorage;
+        }
     }
 
     public save<ValueType>(key: string, value: ValueType) {

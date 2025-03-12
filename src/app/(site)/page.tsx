@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {useEffect, useMemo, useRef, useState} from 'react'
 import { Container, Flex, Text, useDisclosure, useToast } from '@chakra-ui/react'
@@ -41,12 +41,11 @@ export default function Home() {
   const isExtraHoursEmpty = useMemo(() => extraHours.length === 0, [extraHours])
   const toast = useToast()
 
-  const storageService = new StorageClient(localStorage);
+  const storageService = new StorageClient();
 
   useEffect(() => {
     const extraHours = storageService?.get<ExtraHour[]>(StorageKeys.EXTRA_HOURS)
 
-    console.log(extraHours)
     setExtraHours(extraHours ?? [])
   }, [])
 
